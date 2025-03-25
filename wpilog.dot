@@ -1,0 +1,149 @@
+digraph {
+	rankdir=LR;
+	node [shape=plaintext];
+	subgraph cluster__wpilog {
+		label="Wpilog";
+		graph[style=dotted];
+
+		wpilog__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+			<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+			<TR><TD PORT="header_pos">0</TD><TD PORT="header_size">...</TD><TD>Header</TD><TD PORT="header_type">header</TD></TR>
+			<TR><TD PORT="records_pos">...</TD><TD PORT="records_size">...</TD><TD>Record</TD><TD PORT="records_type">records</TD></TR>
+			<TR><TD COLSPAN="4" PORT="records__repeat">repeat to end of stream</TD></TR>
+		</TABLE>>];
+		subgraph cluster__control_record_set_metadata_data {
+			label="Wpilog::ControlRecordSetMetadataData";
+			graph[style=dotted];
+
+			control_record_set_metadata_data__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="entry_id_pos">0</TD><TD PORT="entry_id_size">4</TD><TD>u4le</TD><TD PORT="entry_id_type">entry_id</TD></TR>
+				<TR><TD PORT="len_entry_metadata_pos">4</TD><TD PORT="len_entry_metadata_size">4</TD><TD>u4le</TD><TD PORT="len_entry_metadata_type">len_entry_metadata</TD></TR>
+				<TR><TD PORT="entry_metadata_pos">8</TD><TD PORT="entry_metadata_size">len_entry_metadata</TD><TD>str(UTF-8)</TD><TD PORT="entry_metadata_type">entry_metadata</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__control_record_payload {
+			label="Wpilog::ControlRecordPayload";
+			graph[style=dotted];
+
+			control_record_payload__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="type_pos">0</TD><TD PORT="type_size">1</TD><TD>u1→ControlRecordType</TD><TD PORT="type_type">type</TD></TR>
+				<TR><TD PORT="data_pos">1</TD><TD PORT="data_size">...</TD><TD>switch (type)</TD><TD PORT="data_type">data</TD></TR>
+			</TABLE>>];
+control_record_payload__seq_data_switch [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<TR><TD BGCOLOR="#F0F2E4">case</TD><TD BGCOLOR="#F0F2E4">type</TD></TR>
+	<TR><TD>:control_record_type_start</TD><TD PORT="case0">ControlRecordStartData</TD></TR>
+	<TR><TD>:control_record_type_finish</TD><TD PORT="case1">ControlRecordFinishData</TD></TR>
+	<TR><TD>:control_record_type_set_metadata</TD><TD PORT="case2">ControlRecordSetMetadataData</TD></TR>
+</TABLE>>];
+		}
+		subgraph cluster__version_number {
+			label="Wpilog::VersionNumber";
+			graph[style=dotted];
+
+			version_number__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="minor_pos">0</TD><TD PORT="minor_size">1</TD><TD>u1</TD><TD PORT="minor_type">minor</TD></TR>
+				<TR><TD PORT="major_pos">1</TD><TD PORT="major_size">1</TD><TD>u1</TD><TD PORT="major_type">major</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__control_record_finish_data {
+			label="Wpilog::ControlRecordFinishData";
+			graph[style=dotted];
+
+			control_record_finish_data__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="entry_id_pos">0</TD><TD PORT="entry_id_size">4</TD><TD>u4le</TD><TD PORT="entry_id_type">entry_id</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__control_record_start_data {
+			label="Wpilog::ControlRecordStartData";
+			graph[style=dotted];
+
+			control_record_start_data__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="entry_id_pos">0</TD><TD PORT="entry_id_size">4</TD><TD>u4le</TD><TD PORT="entry_id_type">entry_id</TD></TR>
+				<TR><TD PORT="len_entry_name_pos">4</TD><TD PORT="len_entry_name_size">4</TD><TD>u4le</TD><TD PORT="len_entry_name_type">len_entry_name</TD></TR>
+				<TR><TD PORT="entry_name_pos">8</TD><TD PORT="entry_name_size">len_entry_name</TD><TD>str(UTF-8)</TD><TD PORT="entry_name_type">entry_name</TD></TR>
+				<TR><TD PORT="len_entry_type_pos">...</TD><TD PORT="len_entry_type_size">4</TD><TD>u4le</TD><TD PORT="len_entry_type_type">len_entry_type</TD></TR>
+				<TR><TD PORT="entry_type_pos">...</TD><TD PORT="entry_type_size">len_entry_type</TD><TD>str(UTF-8)</TD><TD PORT="entry_type_type">entry_type</TD></TR>
+				<TR><TD PORT="len_entry_metadata_pos">...</TD><TD PORT="len_entry_metadata_size">4</TD><TD>u4le</TD><TD PORT="len_entry_metadata_type">len_entry_metadata</TD></TR>
+				<TR><TD PORT="entry_metadata_pos">...</TD><TD PORT="entry_metadata_size">len_entry_metadata</TD><TD>str(UTF-8)</TD><TD PORT="entry_metadata_type">entry_metadata</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__header {
+			label="Wpilog::Header";
+			graph[style=dotted];
+
+			header__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="magic_pos">0</TD><TD PORT="magic_size">6</TD><TD></TD><TD PORT="magic_type">magic</TD></TR>
+				<TR><TD PORT="version_pos">6</TD><TD PORT="version_size">2</TD><TD>VersionNumber</TD><TD PORT="version_type">version</TD></TR>
+				<TR><TD PORT="extra_header_length_pos">8</TD><TD PORT="extra_header_length_size">4</TD><TD>u4le</TD><TD PORT="extra_header_length_type">extra_header_length</TD></TR>
+				<TR><TD PORT="extra_header_pos">12</TD><TD PORT="extra_header_size">extra_header_length</TD><TD>str(UTF-8)</TD><TD PORT="extra_header_type">extra_header</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__record {
+			label="Wpilog::Record";
+			graph[style=dotted];
+
+			record__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="header_length_pos">0</TD><TD PORT="header_length_size">1</TD><TD>RecordHeaderLength</TD><TD PORT="header_length_type">header_length</TD></TR>
+				<TR><TD PORT="entry_id_pos">1</TD><TD PORT="entry_id_size">...</TD><TD>switch (header_length.len_entry_id)</TD><TD PORT="entry_id_type">entry_id</TD></TR>
+				<TR><TD PORT="len_payload_pos">...</TD><TD PORT="len_payload_size">...</TD><TD>switch (header_length.len_payload_size)</TD><TD PORT="len_payload_type">len_payload</TD></TR>
+				<TR><TD PORT="timestamp_pos">...</TD><TD PORT="timestamp_size">...</TD><TD>switch (header_length.len_timestamp)</TD><TD PORT="timestamp_type">timestamp</TD></TR>
+				<TR><TD PORT="payload_pos">...</TD><TD PORT="payload_size">...</TD><TD>switch (entry_id)</TD><TD PORT="payload_type">payload</TD></TR>
+			</TABLE>>];
+record__seq_entry_id_switch [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<TR><TD BGCOLOR="#F0F2E4">case</TD><TD BGCOLOR="#F0F2E4">type</TD></TR>
+</TABLE>>];
+record__seq_len_payload_switch [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<TR><TD BGCOLOR="#F0F2E4">case</TD><TD BGCOLOR="#F0F2E4">type</TD></TR>
+</TABLE>>];
+record__seq_timestamp_switch [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<TR><TD BGCOLOR="#F0F2E4">case</TD><TD BGCOLOR="#F0F2E4">type</TD></TR>
+</TABLE>>];
+record__seq_payload_switch [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<TR><TD BGCOLOR="#F0F2E4">case</TD><TD BGCOLOR="#F0F2E4">type</TD></TR>
+	<TR><TD>0</TD><TD PORT="case0">ControlRecordPayload</TD></TR>
+</TABLE>>];
+		}
+		subgraph cluster__record_header_length {
+			label="Wpilog::RecordHeaderLength";
+			graph[style=dotted];
+
+			record_header_length__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="len_entry_id_pos">0</TD><TD PORT="len_entry_id_size">2b</TD><TD>b2</TD><TD PORT="len_entry_id_type">len_entry_id</TD></TR>
+				<TR><TD PORT="len_payload_size_pos">0:2</TD><TD PORT="len_payload_size_size">2b</TD><TD>b2</TD><TD PORT="len_payload_size_type">len_payload_size</TD></TR>
+				<TR><TD PORT="len_timestamp_pos">0:4</TD><TD PORT="len_timestamp_size">3b</TD><TD>b3</TD><TD PORT="len_timestamp_type">len_timestamp</TD></TR>
+				<TR><TD PORT="spare_bit_pos">0:7</TD><TD PORT="spare_bit_size">1b</TD><TD>BitsType1(LittleBitEndian)</TD><TD PORT="spare_bit_type">spare_bit</TD></TR>
+			</TABLE>>];
+		}
+	}
+	wpilog__seq:header_type -> header__seq [style=bold];
+	wpilog__seq:records_type -> record__seq [style=bold];
+	control_record_set_metadata_data__seq:len_entry_metadata_type -> control_record_set_metadata_data__seq:entry_metadata_size [color="#404040"];
+	control_record_payload__seq:data_type -> control_record_payload__seq_data_switch [style=bold];
+	control_record_payload__seq_data_switch:case0 -> control_record_start_data__seq [style=bold];
+	control_record_payload__seq_data_switch:case1 -> control_record_finish_data__seq [style=bold];
+	control_record_payload__seq_data_switch:case2 -> control_record_set_metadata_data__seq [style=bold];
+	control_record_payload__seq:type_type -> control_record_payload__seq:data_type [color="#404040"];
+	control_record_start_data__seq:len_entry_name_type -> control_record_start_data__seq:entry_name_size [color="#404040"];
+	control_record_start_data__seq:len_entry_type_type -> control_record_start_data__seq:entry_type_size [color="#404040"];
+	control_record_start_data__seq:len_entry_metadata_type -> control_record_start_data__seq:entry_metadata_size [color="#404040"];
+	header__seq:version_type -> version_number__seq [style=bold];
+	header__seq:extra_header_length_type -> header__seq:extra_header_size [color="#404040"];
+	record__seq:header_length_type -> record_header_length__seq [style=bold];
+	record__seq:entry_id_type -> record__seq_entry_id_switch [style=bold];
+	record_header_length__seq:len_entry_id_type -> record__seq:entry_id_type [color="#404040"];
+	record__seq:len_payload_type -> record__seq_len_payload_switch [style=bold];
+	record_header_length__seq:len_payload_size_type -> record__seq:len_payload_type [color="#404040"];
+	record__seq:timestamp_type -> record__seq_timestamp_switch [style=bold];
+	record_header_length__seq:len_timestamp_type -> record__seq:timestamp_type [color="#404040"];
+	record__seq:payload_type -> record__seq_payload_switch [style=bold];
+	record__seq_payload_switch:case0 -> control_record_payload__seq [style=bold];
+	record__seq:entry_id_type -> record__seq:payload_type [color="#404040"];
+}
