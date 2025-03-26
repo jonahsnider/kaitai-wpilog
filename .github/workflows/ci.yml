@@ -1,0 +1,19 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  compile:
+    name: Compile
+
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
+      - name: Setup Kaitai Struct compiler
+        uses: jonahsnider/kaitai-action@v1.0.1
+      - name: Compile schema
+        run: kaitai-struct-compiler --target graphviz wpilog.ksy
