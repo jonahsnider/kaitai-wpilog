@@ -1,0 +1,19 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  compile:
+    name: Compile
+
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
+      - name: Compile schema
+        uses: jonahsnider/kaitai-action@main
+        with:
+          args: --target graphviz wpilog.ksy
