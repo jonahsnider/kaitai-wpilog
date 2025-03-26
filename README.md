@@ -7,3 +7,5 @@
 This repository [contains a Kaitai Struct definition for the WPILOG format](./wpilog.ksy).
 
 There's also a [Graphviz DOT visualization](./wpilog.dot) generated from the Kaitai Struct definition.
+
+![WPILOG visualization](./wpilog.png)

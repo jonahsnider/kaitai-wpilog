@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout Git repository
         uses: actions/checkout@v4
-      - name: Install Kaitai Struct compiler
-        uses: jonahsnider/kaitai-action@main
+      - name: Setup Kaitai Struct compiler
+        uses: jonahsnider/kaitai-action@v1
       - name: Compile schema
         run: kaitai-struct-compiler --target graphviz wpilog.ksy

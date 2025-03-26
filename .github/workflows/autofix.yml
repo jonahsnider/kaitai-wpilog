@@ -1,0 +1,32 @@
+name: autofix.ci # needed to securely identify the workflow
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  validation:
+    name: Validate Gradle wrappers
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
+      - name: Validate Gradle wrappers
+        uses: gradle/actions/wrapper-validation@v4
+  autofix:
+    name: Autofix
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
+      - name: Setup Kaitai Struct compiler
+        uses: jonahsnider/kaitai-action@v1
+      - name: Compile schema
+        run: kaitai-struct-compiler --target graphviz wpilog.ksy
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+      - name: Render diagram
+        run: dot -Tsvg wpilog.dot > wpilog.svg
+      - name: Run autofix.ci
+        uses: autofix-ci/action@v1
