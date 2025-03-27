@@ -1,0 +1,2 @@
+wpilog.ksy
+Additional properties are not allowed ('bit-endian' was unexpected)
