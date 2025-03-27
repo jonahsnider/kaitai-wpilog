@@ -1,5 +1,5 @@
 attrs==25.3.0
-jsonschema==3.0.2
+jsonschema==3.2.0
 ksylint==0.3.1
 pathspec==0.12.1
 pyrsistent==0.20.0
