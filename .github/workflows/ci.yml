@@ -2,6 +2,9 @@ name: CI
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   compile:
     name: Compile
@@ -17,3 +20,21 @@ jobs:
         uses: jonahsnider/kaitai-action@v1.0.1
       - name: Compile schema
         run: kaitai-struct-compiler --target graphviz wpilog.ksy
+  lint:
+    name: Lint
+
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          cache: 'pip'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run ksylint
+        run: test "$(ksylint wpilog.ksy)" = "$(cat ./expected_lint_output.txt)"
