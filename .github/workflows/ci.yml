@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout Git repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Kaitai Struct compiler
         uses: jonahsnider/kaitai-action@v1.0.1
       - name: Compile schema
@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout Git repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
