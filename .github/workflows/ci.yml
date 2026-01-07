@@ -17,7 +17,7 @@ jobs:
       - name: Checkout Git repository
         uses: actions/checkout@v6
       - name: Setup Kaitai Struct compiler
-        uses: jonahsnider/kaitai-action@v1.0.1
+        uses: jonahsnider/kaitai-action@v1.0.2
       - name: Compile schema
         run: kaitai-struct-compiler --target graphviz wpilog.ksy
   lint:
