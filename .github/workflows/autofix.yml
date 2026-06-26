@@ -12,7 +12,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout Git repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Kaitai Struct compiler
         uses: jonahsnider/kaitai-action@v1.0.2
       - name: Compile schema
