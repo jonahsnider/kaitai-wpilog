@@ -30,11 +30,11 @@ jobs:
     steps:
       - name: Checkout Git repository
         uses: actions/checkout@v7
-      - name: Setup Python
-        uses: actions/setup-python@v7
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v10.2.0
         with:
-          cache: 'pip'
+          python-version: '3.11'
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: uv sync --locked
       - name: Run ksylint
-        run: test "$(ksylint wpilog.ksy)" = "$(cat ./expected_lint_output.txt)"
+        run: test "$(uv run --locked ksylint wpilog.ksy)" = "$(cat ./expected_lint_output.txt)"
