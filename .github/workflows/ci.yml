@@ -6,8 +6,8 @@ permissions:
   contents: read
 
 jobs:
-  compile:
-    name: Compile
+  compile-and-lint:
+    name: Compile and lint
 
     runs-on: ubuntu-latest
 
@@ -18,23 +18,14 @@ jobs:
         uses: actions/checkout@v7
       - name: Setup Kaitai Struct compiler
         uses: jonahsnider/kaitai-action@v1.0.2
-      - name: Compile schema
-        run: kaitai-struct-compiler --target graphviz wpilog.ksy
-  lint:
-    name: Lint
-
-    runs-on: ubuntu-latest
-
-    timeout-minutes: 5
-
-    steps:
-      - name: Checkout Git repository
-        uses: actions/checkout@v7
       - name: Setup uv
         uses: astral-sh/setup-uv@v10.3.0
         with:
           python-version: '3.11'
       - name: Install dependencies
         run: uv sync --locked
-      - name: Run ksylint
-        run: test "$(uv run --locked ksylint wpilog.ksy)" = "$(cat ./expected_lint_output.txt)"
+      - parallel:
+          - name: Compile schema
+            run: kaitai-struct-compiler --target graphviz wpilog.ksy
+          - name: Run ksylint
+            run: test "$(uv run --locked ksylint wpilog.ksy)" = "$(cat ./expected_lint_output.txt)"
