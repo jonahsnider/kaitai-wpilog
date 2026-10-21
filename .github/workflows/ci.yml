@@ -19,7 +19,7 @@ jobs:
       - name: Setup Kaitai Struct compiler
         uses: jonahsnider/kaitai-action@v1.0.2
       - name: Setup uv
-        uses: astral-sh/setup-uv@v10.3.0
+        uses: astral-sh/setup-uv@v10.3.1
         with:
           python-version: '3.11'
       - name: Install dependencies
