@@ -12,14 +12,14 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout Git repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Setup Kaitai Struct compiler
-        uses: jonahsnider/kaitai-action@v1.0.2
+        uses: jonahsnider/kaitai-action@fec6bad5926e0e9e4bb85f52b8cbebab80edbf2d # v1.0.2
       - name: Compile schema
         run: kaitai-struct-compiler --target graphviz wpilog.ksy
       - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
+        uses: ts-graphviz/setup-graphviz@b1de5da23ed0a6d14e0aeee8ed52fdd87af2363c # v2
       - name: Render diagram
         run: dot -Tsvg wpilog.dot > wpilog.svg
       - name: Run autofix.ci
-        uses: autofix-ci/action@v1
+        uses: autofix-ci/action@c5b2d67aa2274e7b5a18224e8171550871fc7e4a # v1
